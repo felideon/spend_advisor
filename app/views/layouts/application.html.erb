@@ -2,13 +2,27 @@
 <html>
 <head>
   <title>SpendAdvisor</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div class="container">
+    <div class="header">
+      <ul class="nav nav-pills pull-right">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+      <h3 class="text-muted">SpendAdvisor</h3>
+    </div>
+      
+    <%= yield %>
 
-<%= yield %>
+    <div class="footer">
+      <p>&copy; Felipe Delgado 2014</p>
+    </div>
+    
+  </div>
 
 </body>
 </html>
