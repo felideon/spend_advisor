@@ -1,0 +1,53 @@
+rent:
+  amt: 1050
+  freq: Monthly
+  name: Rent
+  start_date: 2014-07-01
+
+utilities:
+  amt: 310
+  freq: Monthly
+  name: Utilities
+  start_date: 2014-07-05
+
+food:
+  amt: 150
+  freq: Weekly
+  name: Food
+  start_date: 2014-07-01
+
+auto:
+  amt: 75
+  freq: Weekly
+  name: Car Fuel & Maintenance
+  start_date: 2014-07-01
+
+clothes:
+  amt: 160
+  freq: Monthly
+  name: Clothes
+  start_date: 2014-07-15
+
+medical:
+  amt: 420
+  freq: Monthly
+  name: Medical Expenses
+  start_date: 2014-07-15
+
+personal:
+  amt: 80
+  freq: Weekly
+  name: Personal Expenses
+  start_date: 2014-07-01
+
+recreation:
+  amt: 85
+  freq: Weekly
+  name: Recreation
+  start_date: 2014-07-01
+
+debt:
+  amt: 500
+  freq: Monthly
+  name: Debt Payoff
+  start_date: 2014-07-15
