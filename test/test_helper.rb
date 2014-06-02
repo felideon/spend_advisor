@@ -10,4 +10,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def assert_http_status(expected, actual)
+    assert_equal(expected, actual, "HTTP Status: #{actual}")
+  end
 end
