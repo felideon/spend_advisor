@@ -94,4 +94,11 @@ module Gzo
 
     future_incomes.flatten
   end
+
+  def checking_account_balance(user_id)
+    uri = "#{api_endpoint}users/#{user_id}/accounts"
+    accts = response_body(RestClient.get uri)['accounts']
+    checking = accts.select { |a| a['display_account_type'] == 'checking' }[0]
+    balance = BigDecimal.new(checking['balance'])
+  end
 end
