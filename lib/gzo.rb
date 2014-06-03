@@ -65,4 +65,21 @@ module Gzo
     end
   end
 
+  def future_cashflow_bills(user_id)
+    bills = response_body(cashflow_bills(user_id))['bills']
+    future_bills = bills.map do |bill|
+      synthesize_future_cashflow_events(bill)
+    end
+
+    future_bills.flatten
+  end
+
+  def future_cashflow_incomes(user_id)
+    incomes = response_body(cashflow_incomes(user_id))['incomes']
+    future_incomes = incomes.map do |income|
+      synthesize_future_cashflow_events(income)
+    end
+
+    future_incomes.flatten
+  end
 end
