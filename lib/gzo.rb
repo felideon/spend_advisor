@@ -53,4 +53,16 @@ module Gzo
                     :accept => :json)
   end
 
+  def synthesize_future_cashflow_events(cashflow)
+    future_events = []
+    weekdates = frequency_to_weekdates(frequency_to_hash(cashflow['frequency']),
+                                       Date.today,
+                                       (Date.today + 6.months))
+    future_events = weekdates.map do |date|
+      { :name => cashflow['name'],
+        :amount => cashflow['amount'],
+        :weekdate => date }
+    end
+  end
+
 end

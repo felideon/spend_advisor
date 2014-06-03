@@ -8,6 +8,31 @@ module Utils
     JSON.parse(response.body)
   end
 
+  def frequency_to_hash(freq)
+    case freq
+    when 'Daily'
+      { :units => 1, :interval => 'day' }
+    when 'Every four weeks'
+      { :units => 4, :interval => 'week' }
+    when 'Every other week'
+      { :units => 2, :interval => 'week' }
+    when 'Every six months'
+      { :units => 6, :interval => 'month' }
+    when 'Monthly'
+      { :units => 1, :interval => 'month' }
+    when 'Once'
+      { :units => 0, :interval => 'day' }
+    when 'Quarterly'
+      { :units => 2, :interval => 'month' }
+    when 'Twice a month'
+      { :units => 0.5, :interval => 'month' }
+    when 'Weekly'
+      { :units => 1, :interval => 'week' }
+    when 'Yearly'
+      { :units => 1, :interval => 'year' }
+    end
+  end
+
   def frequency_to_weekdates(freq, start_date, end_date)
     dates = []
     num_intervals = nil
