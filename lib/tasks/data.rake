@@ -7,6 +7,7 @@ namespace :data do
   namespace :cashflows do
     desc "Delete existing test cashflows"
     task delete: :environment do
+      delete_all_cashflows('nfreeman')
     end
 
     desc "Create test cashflows"

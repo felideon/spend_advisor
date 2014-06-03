@@ -15,6 +15,18 @@ module Gzo
     RestClient.get "#{api_endpoint}ping"
   end
 
+  def delete_all_cashflows(user_id)
+    response_body(cashflow_incomes(user_id))['incomes'].each do |income|
+      id = income['id']
+      RestClient.delete "#{api_endpoint}users/#{user_id}/cashflow/incomes/#{id}"
+    end
+
+    response_body(cashflow_bills(user_id))['bills'].each do |bill|
+      id = bill['id']
+      RestClient.delete "#{api_endpoint}users/#{user_id}/cashflow/bills/#{id}"
+    end
+  end
+
   def create_cashflow_bill(user_id, options={})
     validate_options([:amt, :freq, :name, :start_date], options.keys)
 
