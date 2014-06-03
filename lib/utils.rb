@@ -33,7 +33,7 @@ module Utils
     end
   end
 
-  def frequency_to_weekdates(freq, start_date, end_date)
+  def frequency_to_dates(freq, start_date, end_date)
     dates = []
     num_intervals = nil
 
@@ -52,7 +52,6 @@ module Utils
       start_date + i.send(freq[:interval])
     end
 
-    # return dates in ISO 8601 week date format
-    dates.flatten.map { |d| d.strftime("%G-W%V-%u") }
+    dates.flatten
   end
 end

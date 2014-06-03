@@ -67,13 +67,14 @@ module Gzo
 
   def synthesize_future_cashflow_events(cashflow)
     future_events = []
-    weekdates = frequency_to_weekdates(frequency_to_hash(cashflow['frequency']),
-                                       Date.today,
-                                       (Date.today + 6.months))
-    future_events = weekdates.map do |date|
+    dates = frequency_to_dates(frequency_to_hash(cashflow['frequency']),
+                                   Date.today,
+                                   (Date.today + 6.months))
+    future_events = dates.map do |date|
       { :name => cashflow['name'],
         :amount => cashflow['amount'],
-        :weekdate => date }
+        :weekdate => date.strftime("%G-W%V-%u"),
+        :date => date }
     end
   end
 
@@ -83,7 +84,7 @@ module Gzo
       synthesize_future_cashflow_events(bill)
     end
 
-    future_bills.flatten
+    future_bills.flatten.sort_by { |b| b[:date] }
   end
 
   def future_cashflow_incomes(user_id)
@@ -92,7 +93,7 @@ module Gzo
       synthesize_future_cashflow_events(income)
     end
 
-    future_incomes.flatten
+    future_incomes.flatten.sort_by { |b| b[:date] }
   end
 
   def checking_account_balance(user_id)
@@ -100,5 +101,29 @@ module Gzo
     accts = response_body(RestClient.get uri)['accounts']
     checking = accts.select { |a| a['display_account_type'] == 'checking' }[0]
     balance = BigDecimal.new(checking['balance'])
+  end
+
+  def weekly_future_bills(user_id)
+    bills_by_week = future_cashflow_bills(user_id).group_by do |h|
+      h[:weekdate][0..-3]
+    end
+    bills_by_week.map do |week,bills|
+      { week => (bills.reduce(0) do |sum,bill|
+                   sum + bill[:amount].to_f
+                 end)
+      }
+    end
+  end
+
+  def weekly_future_incomes(user_id)
+    incomes_by_week = future_cashflow_incomes(user_id).group_by do |h|
+      h[:weekdate][0..-3]
+    end
+    incomes_by_week.map do |week,incomes|
+      { week => (incomes.reduce(0) do |sum,income|
+                   sum + income[:amount].to_f
+                 end)
+      }
+    end
   end
 end
