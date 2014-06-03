@@ -15,14 +15,6 @@ module Gzo
     RestClient.get "#{api_endpoint}ping"
   end
 
-  def cashflow_bills(user_id)
-    RestClient.get "#{api_endpoint}users/#{user_id}/cashflow/bills"
-  end
-
-  def cashflow_incomes(user_id)
-    RestClient.get "#{api_endpoint}users/#{user_id}/cashflow/incomes"
-  end
-
   def create_cashflow_bill(user_id, options={})
     validate_options([:amt, :freq, :name, :start_date], options.keys)
 
@@ -51,6 +43,14 @@ module Gzo
                     }.to_json,
                     :content_type => :json,
                     :accept => :json)
+  end
+
+  def cashflow_bills(user_id)
+    RestClient.get "#{api_endpoint}users/#{user_id}/cashflow/bills"
+  end
+
+  def cashflow_incomes(user_id)
+    RestClient.get "#{api_endpoint}users/#{user_id}/cashflow/incomes"
   end
 
   def synthesize_future_cashflow_events(cashflow)
