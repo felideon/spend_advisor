@@ -54,4 +54,5 @@ module Utils
 
     dates.flatten
   end
+
 end

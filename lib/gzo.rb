@@ -67,9 +67,10 @@ module Gzo
 
   def synthesize_future_cashflow_events(cashflow)
     future_events = []
+    start_date = cashflow['start_date'].to_date
     dates = frequency_to_dates(frequency_to_hash(cashflow['frequency']),
-                                   Date.today,
-                                   (Date.today + 6.months))
+                               start_date,
+                               (start_date + 6.months))
     future_events = dates.map do |date|
       { :name => cashflow['name'],
         :amount => cashflow['amount'],
@@ -96,6 +97,13 @@ module Gzo
     future_incomes.flatten.sort_by { |b| b[:date] }
   end
 
+  def future_cashflows(user_id)
+    cashflows = (future_cashflow_bills(user_id) +
+                 future_cashflow_incomes(user_id))
+
+    cashflows.sort_by { |cashflow| cashflow[:date] }
+  end
+
   def checking_account_balance(user_id)
     uri = "#{api_endpoint}users/#{user_id}/accounts"
     accts = response_body(RestClient.get uri)['accounts']
@@ -103,7 +111,7 @@ module Gzo
     balance = BigDecimal.new(checking['balance'])
   end
 
-  def weekly_future_bills(user_id)
+  def weekly_future_debits(user_id)
     bills_by_week = future_cashflow_bills(user_id).group_by do |h|
       h[:weekdate][0..-3]
     end
@@ -115,7 +123,7 @@ module Gzo
     end
   end
 
-  def weekly_future_incomes(user_id)
+  def weekly_future_credits(user_id)
     incomes_by_week = future_cashflow_incomes(user_id).group_by do |h|
       h[:weekdate][0..-3]
     end
@@ -126,4 +134,36 @@ module Gzo
       }
     end
   end
+
+  def weekly_future_cashflow(user_id)
+    start_date = future_cashflows(user_id).min_by { |flo| flo[:date] }[:date]
+    end_date = future_cashflows(user_id).max_by { |flo| flo[:date] }[:date]
+
+    dates = frequency_to_dates(frequency_to_hash('Weekly'),
+                               start_date,
+                               end_date)
+    weeks = dates.map { |d| d.strftime("%G-W%V") }
+
+    credits = weekly_future_credits(user_id)
+    debits = weekly_future_debits(user_id)
+
+    weeks.map do |week|
+      total_credits = credits.select { |cr| cr[week] }.reduce(0) do |sum,h|
+        sum + h[week]
+      end
+      total_debits = debits.select { |dr| dr[week] }.reduce(0) do |sum,h|
+        sum + h[week]
+      end
+
+      { :week => week, :cashflow => total_credits + total_debits }
+    end
+  end
+
+  def weekly_future_balances(user_id)
+    sum = 0
+    weekly_future_cashflow(user_id).map { |net| net[:cashflow] }.map do |x|
+      sum += x
+    end
+  end
+
 end
