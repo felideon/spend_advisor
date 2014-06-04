@@ -135,7 +135,7 @@ module Gzo
     end
   end
 
-  def weekly_future_cashflow(user_id)
+  def weekly_future_noncumulative_balances(user_id)
     start_date = future_cashflows(user_id).min_by { |flo| flo[:date] }[:date]
     end_date = future_cashflows(user_id).max_by { |flo| flo[:date] }[:date]
 
@@ -161,10 +161,14 @@ module Gzo
 
   def weekly_future_balances(user_id, offset=0)
     balance = checking_account_balance(user_id) - offset.to_d
-    weekly_future_cashflow(user_id).map do |week|
+    weekly_future_noncumulative_balances(user_id).map do |week|
       balance += week[:cashflow]
       { :week => week[:week], :balance => balance }
     end
+  end
+
+  def weekly_future_balance_amounts(user_id, offset=0)
+    weekly_future_balances(user_id, offset).map { |w| w[:balance].to_f }
   end
 
 end
