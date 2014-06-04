@@ -25,7 +25,7 @@ module Utils
     when 'Quarterly'
       { :units => 2, :interval => 'month' }
     when 'Twice a month'
-      { :units => 0.5, :interval => 'month' }
+      { :units => 15, :interval => 'day' }
     when 'Weekly'
       { :units => 1, :interval => 'week' }
     when 'Yearly'
