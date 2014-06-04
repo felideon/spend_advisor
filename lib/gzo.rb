@@ -159,8 +159,8 @@ module Gzo
     end
   end
 
-  def weekly_future_balances(user_id)
-    sum = checking_account_balance(user_id)
+  def weekly_future_balances(user_id, offset=0)
+    sum = checking_account_balance(user_id) - offset.to_d
     weekly_future_cashflow(user_id).map { |net| net[:cashflow] }.map do |x|
       sum += x
     end
