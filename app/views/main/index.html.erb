@@ -1,11 +1,25 @@
 <div class="jumbotron">
   <h2>Can I afford to spend</h2>
-  <div class="form-group">
-    <div class="input-group narrow">
-      <span class="input-group-addon">$</span>
-      <input type="text" class="form-control">
+  <%= form_tag "/main/advise" do %>
+    <div class="form-group">
+      <div class="input-group narrow">
+        <span class="input-group-addon">$</span>
+        <input id="amount" name="amount" type="text" class="form-control">
+      </div>
+    </div>
+    <p class="lead">without breaking bank?</p>
+    <input name="advise" type="submit" value="Find Out" class="btn btn-lg btn-primary">
+  <% end %>
+</div>
+
+<% if params[:action] == 'spending_advice' %>
+  <div class="row marketing">
+    <div class="col-xs-12">
+      <% if @first_negative_position %>
+        <h1>No, your account balance would drop below $100 in the near future.</h1>
+      <% else %>
+        <h1>Sure! Go for it.</h1>
+      <% end %>
     </div>
   </div>
-  <p class="lead">without breaking bank?</p>
-  <p><a class="btn btn-lg btn-primary" href="#" role="button">Find Out</a></p>
-</div>
+<% end %>

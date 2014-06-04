@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   root 'main#index'
+  post 'main/advise' => 'main#spending_advice'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
