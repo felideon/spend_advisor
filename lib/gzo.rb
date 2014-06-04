@@ -117,7 +117,7 @@ module Gzo
     end
     bills_by_week.map do |week,bills|
       { week => (bills.reduce(0) do |sum,bill|
-                   sum + bill[:amount].to_f
+                   sum + bill[:amount].to_d
                  end)
       }
     end
@@ -129,7 +129,7 @@ module Gzo
     end
     incomes_by_week.map do |week,incomes|
       { week => (incomes.reduce(0) do |sum,income|
-                   sum + income[:amount].to_f
+                   sum + income[:amount].to_d
                  end)
       }
     end
@@ -160,7 +160,7 @@ module Gzo
   end
 
   def weekly_future_balances(user_id)
-    sum = 0
+    sum = checking_account_balance(user_id)
     weekly_future_cashflow(user_id).map { |net| net[:cashflow] }.map do |x|
       sum += x
     end
