@@ -16,12 +16,12 @@ module Gzo
   end
 
   def delete_all_cashflows(user_id)
-    response_body(cashflow_incomes(user_id))['incomes'].each do |income|
+    parse_body(cashflow_incomes(user_id))['incomes'].each do |income|
       id = income['id']
       RestClient.delete "#{api_endpoint}users/#{user_id}/cashflow/incomes/#{id}"
     end
 
-    response_body(cashflow_bills(user_id))['bills'].each do |bill|
+    parse_body(cashflow_bills(user_id))['bills'].each do |bill|
       id = bill['id']
       RestClient.delete "#{api_endpoint}users/#{user_id}/cashflow/bills/#{id}"
     end
@@ -80,7 +80,7 @@ module Gzo
   end
 
   def future_cashflow_bills(user_id)
-    bills = response_body(cashflow_bills(user_id))['bills']
+    bills = parse_body(cashflow_bills(user_id))['bills']
     future_bills = bills.map do |bill|
       synthesize_future_cashflow_events(bill)
     end
@@ -89,7 +89,7 @@ module Gzo
   end
 
   def future_cashflow_incomes(user_id)
-    incomes = response_body(cashflow_incomes(user_id))['incomes']
+    incomes = parse_body(cashflow_incomes(user_id))['incomes']
     future_incomes = incomes.map do |income|
       synthesize_future_cashflow_events(income)
     end
@@ -106,7 +106,7 @@ module Gzo
 
   def checking_account_balance(user_id)
     uri = "#{api_endpoint}users/#{user_id}/accounts"
-    accts = response_body(RestClient.get uri)['accounts']
+    accts = parse_body(RestClient.get uri)['accounts']
     checking = accts.select { |a| a['display_account_type'] == 'checking' }[0]
     balance = BigDecimal.new(checking['balance'])
   end

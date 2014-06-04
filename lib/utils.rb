@@ -4,7 +4,7 @@ module Utils
     raise "Invalid keys: #{test_keys}" unless invalid_keys.empty?
   end
 
-  def response_body(response)
+  def parse_body(response)
     JSON.parse(response.body)
   end
 
