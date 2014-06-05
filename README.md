@@ -6,7 +6,10 @@ requires access thereto.
 
 ## Getting Started
 
-Before running the application, you will need to set up a few things.
+Before running the application, you will need to set up a few
+things. (*Note:* This is a Rails 4.1.0 app. Ostensibly, the only
+change required to be Rails 3 compatible is to swap out the use of
+`secrets.yml`.)
 
 ### Environment Variables
 
