@@ -13,7 +13,7 @@ Before running the application, you will need to set up a few things.
 In order to not leak the following sensitive information, the
 `secrets.yml` has been used to grab some values from the environment, like so:
 
-```ruby
+```
 gzo_api_key: <%= ENV["GZO_API_KEY"] %>
 gzo_cust_id: <%= ENV["GZO_CUST_ID"] %>
 gzo_domain: <%= ENV["GZO_DOMAIN"] %>
