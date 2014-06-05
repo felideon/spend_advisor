@@ -4,6 +4,13 @@ require 'gzo'
 include Gzo
 
 class GzoTest < ActiveSupport::TestCase
+  def text_env_variables_set
+    assert_not(Rails.application.secrets.gzo_api_key.blank?, "$GZO_API_KEY not set")
+    assert_not(Rails.application.secrets.gzo_cust_id.blank?, "$GZO_CUST_ID not set")
+    assert_not(Rails.application.secrets.gzo_domain.blank?, "$GZO_DOMAIN not set")
+    assert_not(Rails.application.secrets.gzo_user_id.blank?, "GZO_USER_ID not set")
+  end
+
   def test_ping_returns_pong
     response = ping
     assert(response.code == 200, "HTTP Status: #{response.code}")
@@ -47,7 +54,8 @@ class GzoTest < ActiveSupport::TestCase
     assert_http_status(200, response.code)
 
     assert_not(JSON.parse(response.body)['bills'].nil?)
-    assert(JSON.parse(response.body)['bills'].size == 10)
+    assert(JSON.parse(response.body)['bills'].size == 10,
+           "Cashflow bills present, but unexpected number of them were found.")
   end
 
   def test_cashflow_incomes_present
@@ -55,7 +63,8 @@ class GzoTest < ActiveSupport::TestCase
     assert_http_status(200, response.code)
 
     assert_not(JSON.parse(response.body)['incomes'].nil?)
-    assert(JSON.parse(response.body)['incomes'].size == 1)
+    assert(JSON.parse(response.body)['incomes'].size == 1,
+           "Cashflow incomes present, but unexpected number of them were found.")
   end
 
   def test_future_cashflow_structures
