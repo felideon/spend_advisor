@@ -47,6 +47,7 @@ class GzoTest < ActiveSupport::TestCase
     assert_http_status(200, response.code)
 
     assert_not(JSON.parse(response.body)['bills'].nil?)
+    assert(JSON.parse(response.body)['bills'].size == 10)
   end
 
   def test_cashflow_incomes_present
@@ -54,5 +55,44 @@ class GzoTest < ActiveSupport::TestCase
     assert_http_status(200, response.code)
 
     assert_not(JSON.parse(response.body)['incomes'].nil?)
+    assert(JSON.parse(response.body)['incomes'].size == 1)
   end
+
+  def test_future_cashflow_structures
+    future_cashflow_bills('nfreeman').each do |b|
+      assert(b.has_key?(:name) &&
+             b.has_key?(:amount) &&
+             b.has_key?(:weekdate) &&
+             b.has_key?(:date))
+    end
+
+    future_cashflow_incomes('nfreeman').each do |b|
+      assert(b.has_key?(:name) &&
+             b.has_key?(:amount) &&
+             b.has_key?(:weekdate) &&
+             b.has_key?(:date))
+    end
+  end
+
+  def test_checking_account_balance
+    assert_equal(checking_account_balance('nfreeman').to_d,
+                 '300.54'.to_d)
+  end
+
+  def test_weekly_future_debits_and_credits
+    weekly_future_debits('nfreeman').each do |week|
+      assert_match(/201\d-W\d\d/, week.keys[0])
+    end
+
+    weekly_future_credits('nfreeman').each do |week|
+      assert_match(/201\d-W\d\d/, week.keys[0])
+    end
+  end
+
+  def test_weekly_future_balances
+    weekly_future_balances('nfreeman').select do |w|
+      assert_match(/201\d-W\d\d/, w[:week])
+    end
+  end
+
 end
