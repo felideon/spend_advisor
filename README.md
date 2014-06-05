@@ -11,7 +11,8 @@ Before running the application, you will need to set up a few things.
 ### Environment Variables
 
 In order to not leak the following sensitive information, the
-`secrets.yml` has been used to grab some values from the environment, like so:
+`secrets.yml` file has been used to grab some values from the
+environment, like so:
 
 ```
 gzo_api_key: <%= ENV["GZO_API_KEY"] %>
@@ -57,8 +58,9 @@ the rake script.
 To run tests, simply run `rake test test/models/gzo_test.rb`. There
 are no tests for the controller or UI yet. 
 
-Also, **make sure to re-run** the `rake data:all` after running tests to
-reset the generated cashflows as per the seed data (YAML files).
+Also, **make sure to re-run** the `rake data:all` script after running
+tests to reset the generated cashflows as per the seed data (YAML
+files).
 
 ### Run the server
 
